@@ -80,11 +80,13 @@ module CombinePDF
       @parsed = _parse_
       # puts @parsed
 
-      @parsed.shift if @parsed.first == 0
+
+      @parsed.shift unless @parsed.first.is_a?(Hash)
+
       unless (@parsed.select { |i| !i.is_a?(Hash) }).empty?
         # p @parsed.select
-        parsed_data = @parsed.force_encoding("ISO-8859-1").encode("UTF-8")
-        raise ParsingError, "Unknown PDF parsing error - malformed PDF file? #{parsed_data}"
+
+        raise ParsingError, "Unknown PDF parsing error - malformed PDF file?"
       end
 
       if @root_object == {}.freeze
