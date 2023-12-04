@@ -324,13 +324,13 @@ module CombinePDF
         else
           @forms_data = data.forms_data
         end
-        warn 'Form data might be lost when combining PDF forms (possible conflicts).' unless data.forms_data.nil? || data.forms_data.empty? unless Rails.test?
+        warn 'Form data might be lost when combining PDF forms (possible conflicts).' unless data.forms_data.nil? || data.forms_data.empty? || Rails.env.test?
       elsif data.is_a?(Array) && (data.select { |o| !(o.is_a?(Hash) && o[:Type] == :Page) }).empty?
         pages_to_add = data
       elsif data.is_a?(Hash) && data[:Type] == :Page
         pages_to_add = [data]
       else
-        warn "Shouldn't add objects to the file unless they are PDF objects or PDF pages (an Array or a single PDF page)." unless Rails.test?
+        warn "Shouldn't add objects to the file unless they are PDF objects or PDF pages (an Array or a single PDF page)." unless Rails.env.test?
         return false # return false, which will also stop any chaining.
       end
       # pages_to_add.map! {|page| page.copy }
